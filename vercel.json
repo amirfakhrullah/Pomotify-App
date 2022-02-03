@@ -1,0 +1,39 @@
+{
+    "version": 2,
+    "name": "pomotify",
+    "builds": [
+        {
+            "src": "client/package.json",
+            "use": "@vercel/static-build",
+            "config": { "distDir": "build" }
+        },
+        {
+            "src": "index.js", 
+            "use": "@vercel/node" 
+        }
+    ],
+    "routes": [
+        { 
+            "src": "/api(.*)", 
+            "dest": "index.js" 
+        },
+        {
+            "src": "/static/(.*)",
+            "headers": { "cache-control": "s-maxage=31536000,immutable" },
+            "dest": "client/static/$1"
+        },
+        { 
+            "src": "/asset-manifest.json", 
+            "dest": "client/asset-manifest.json" 
+        },
+        { 
+            "src": "/manifest.json", 
+            "dest": "client/manifest.json" 
+        },
+        {
+            "src": "^(.*)$",
+            "headers": { "cache-control": "s-maxage=0" },
+            "dest": "client/index.html"
+        }
+    ]
+  }
